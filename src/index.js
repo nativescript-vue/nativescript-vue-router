@@ -15,6 +15,10 @@ import { AbstractHistory } from './history/abstract'
 
 import type { Matcher } from './create-matcher'
 
+export { History } from './history/base'
+
+export { AbstractHistory }
+
 export default class VueRouter {
   static install: () => void;
   static version: string;
@@ -62,6 +66,12 @@ export default class VueRouter {
         this.history = new AbstractHistory(this, options.base)
         break
       default:
+        if (mode && mode.constructor === Object) {
+          this.history = new mode.History(this, options.base)
+          mode = mode.name
+          break
+        }
+
         if (process.env.NODE_ENV !== 'production') {
           assert(false, `invalid mode: ${mode}`)
         }
