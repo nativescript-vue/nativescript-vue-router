@@ -45,12 +45,19 @@ export default class VueRouter {
     this.afterHooks = []
     this.matcher = createMatcher(options.routes || [], this)
 
+    let CustomHistory
     let mode = options.mode || 'hash'
     this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
     if (this.fallback) {
       mode = 'hash'
     }
-    if (!inBrowser) {
+
+    if (mode && mode.constructor === Object) {
+      CustomHistory = mode.History
+      mode = mode.name
+    }
+
+    if (!inBrowser && !CustomHistory) {
       mode = 'abstract'
     }
     this.mode = mode
@@ -66,9 +73,8 @@ export default class VueRouter {
         this.history = new AbstractHistory(this, options.base)
         break
       default:
-        if (mode && mode.constructor === Object) {
-          this.history = new mode.History(this, options.base)
-          mode = mode.name
+        if (CustomHistory) {
+          this.history = new CustomHistory(this, options.base)
           break
         }
 
