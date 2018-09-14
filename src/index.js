@@ -48,10 +48,10 @@ export default class VueRouter {
       mode = 'hash'
     }
 
-    if (mode && mode.constructor === Object) {
-      CustomHistory = mode.factory(AbstractHistory)
+    if (options.mode && options.mode.constructor === Object) {
+      mode = options.mode.name
 
-      mode = mode.name
+      CustomHistory = options.mode.factory(AbstractHistory)
     }
 
     if (!inBrowser && !CustomHistory) {
