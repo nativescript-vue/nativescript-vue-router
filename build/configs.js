@@ -55,6 +55,9 @@ function genConfig (opts) {
       format: opts.format,
       banner,
       name: 'VueRouter'
+    },
+    watch: {
+      chokidar: false
     }
   }
 
